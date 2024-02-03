@@ -1,8 +1,10 @@
 name: S3-synchronization-cronjob
 
 on:
-  schedule:
-    - cron: '0 8 * * *' # Everyday at 8am
+  push:
+    branches:
+      - master
+      - delete-branch
 
 jobs:
   sync:
@@ -18,28 +20,31 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Delete branch
+        run: |
+          git push -d origin sync-123
       - name: Create branch
         uses: peterjgrainger/action-create-branch@v2.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          branch: sync-${{ steps.random.outputs.value }}
+          branch: sync-123
       - uses: actions/checkout@v4
         with:
           ref: sync-${{ steps.random.outputs.value }}
           token: ${{ secrets.GH_TOKEN }}
-      - name: create env file
-        run: |
-          touch .env
-          echo AWS_STARPORT_BAR_AK=${{ secrets.AWS_STARPORT_BAR_AK }} >> .env
-          echo AWS_STARPORT_BAR_SAK=${{ secrets.AWS_STARPORT_BAR_SAK }} >> .env
-          echo REPOSITORY_ID=${{ secrets.REPOSITORY_ID }} >> .env
+      # - name: create env file
+      #   run: |
+      #     touch .env
+      #     echo AWS_STARPORT_BAR_AK=${{ secrets.AWS_STARPORT_BAR_AK }} >> .env
+      #     echo AWS_STARPORT_BAR_SAK=${{ secrets.AWS_STARPORT_BAR_SAK }} >> .env
+      #     echo REPOSITORY_ID=${{ secrets.REPOSITORY_ID }} >> .env
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-      - run: npm install
-      - run: npm run sync-script
+      # - run: npm install
+      # - run: npm run sync-script
       - name: commit and push new file
         run: |
           git config --global user.name "S3 Synchronization Cronjob"
