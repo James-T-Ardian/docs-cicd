@@ -6,7 +6,7 @@
   🚀 UBC Launch Pad's official knowledge base 🚀
 </p>
 
-Welcome to the Launch Pad docs hub.
+Welcome to the Launch Pad docs hub..
 
 We store a great deal of documents that encompasses our club information, good resources and our handbook. This ensures that Launch Pad will have its autonomy as a team club.
 
