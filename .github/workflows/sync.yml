@@ -3,7 +3,7 @@ name: S3-synchronization-cronjob
 on:
   push:
     branches:
-      - master
+      - master # SOME RANDOM PIECE OF COMMENT TO TEST
       - delete-branch
 
 jobs:
